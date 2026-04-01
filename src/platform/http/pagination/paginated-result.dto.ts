@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { PaginatedResult } from '@platform/pagination/paginated-result';
+import { Pagination } from '@platform/pagination/pagination';
 import { Type } from 'class-transformer';
 import { IsInt, Min } from 'class-validator';
-import { PaginatedResult } from '../../pagination/paginated-result';
-import { Pagination } from '../../pagination/pagination';
 
 /**
  * DTO wrappers for Controllers. Provides

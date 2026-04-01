@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Als } from '../als/als';
+import { Als } from '@platform/als/als';
 import { RequestContext } from './request-context';
 
 @Injectable()

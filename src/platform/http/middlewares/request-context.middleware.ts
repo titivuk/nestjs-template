@@ -1,8 +1,8 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Als } from '@platform/als/als';
+import { RequestContext } from '@platform/request-context/request-context';
 import type express from 'express';
 import { randomUUID } from 'node:crypto';
-import { Als } from '../../als/als';
-import { RequestContext } from '../../request-context/request-context';
 
 @Injectable()
 export class RequestContextMiddleware implements NestMiddleware {

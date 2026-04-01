@@ -1,5 +1,5 @@
+import { timestamps } from '@platform/db/column.helpers';
 import { boolean, pgTable, text, uuid } from 'drizzle-orm/pg-core';
-import { timestamps } from '../platform/db/column.helpers';
 
 export const todoListSchema = pgTable('todo_list', {
   id: uuid().primaryKey().defaultRandom(),

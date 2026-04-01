@@ -5,13 +5,13 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { type DbProvider, InjectDb } from '../platform/db/db.module';
+import { type DbProvider, InjectDb } from '@platform/db/db.module';
 import {
   PaginatedResponseDto,
   PaginationDto,
-} from '../platform/http/pagination/paginated-result.dto';
-import { PaginationQuery } from '../platform/http/pagination/pagination-query.decorator';
-import { getPaginatedSchema } from '../platform/http/swagger/get-paginated-schema';
+} from '@platform/http/pagination/paginated-result.dto';
+import { PaginationQuery } from '@platform/http/pagination/pagination-query.decorator';
+import { getPaginatedSchema } from '@platform/http/swagger/get-paginated-schema';
 import { CustomDto } from './custom.dto';
 import { GetTodoItemsItem } from './get-todo-items-item.dto';
 import { TodoActionDdto } from './todo-action.dto';

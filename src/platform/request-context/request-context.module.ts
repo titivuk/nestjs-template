@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AlsModule } from '../als/als.module';
+import { AlsModule } from '@platform/als/als.module';
 import { RequestContextService } from './request-context.service';
 
 @Module({

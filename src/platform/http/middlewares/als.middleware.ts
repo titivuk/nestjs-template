@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Als } from '../../als/als';
+import { Als } from '@platform/als/als';
 
 @Injectable()
 export class AlsMiddleware implements NestMiddleware {
