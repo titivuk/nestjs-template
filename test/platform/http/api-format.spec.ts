@@ -17,7 +17,7 @@ import { HttpModule } from '../../../src/platform/http/http.module';
 
 class TestDto {
   @IsString()
-  foo: string;
+  foo!: string;
 }
 
 @Controller()

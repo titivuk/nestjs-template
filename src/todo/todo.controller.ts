@@ -5,6 +5,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { type DbProvider, InjectDb } from '../platform/db/db.module';
 import {
   PaginatedResponseDto,
   PaginationDto,
@@ -14,13 +15,18 @@ import { getPaginatedSchema } from '../platform/http/swagger/get-paginated-schem
 import { CustomDto } from './custom.dto';
 import { GetTodoItemsItem } from './get-todo-items-item.dto';
 import { TodoActionDdto } from './todo-action.dto';
+import { todoListSchema } from './todo.db';
 import { TodoService } from './todo.service';
 
 @ApiTags('todo')
 @ApiExtraModels(GetTodoItemsItem)
 @Controller('todo')
 export class TodoController {
-  constructor(private readonly todoService: TodoService) {}
+  constructor(
+    private readonly todoService: TodoService,
+    @InjectDb()
+    private readonly dbProvider: DbProvider,
+  ) {}
 
   @Get()
   @ApiOkResponse({ schema: getPaginatedSchema(GetTodoItemsItem) })
@@ -29,7 +35,6 @@ export class TodoController {
     @PaginationQuery()
     pagination?: PaginationDto,
   ): PaginatedResponseDto<GetTodoItemsItem> {
-    console.log(pagination);
     console.log(pagination instanceof PaginationDto);
     return {
       page: 1,
@@ -48,4 +53,10 @@ export class TodoController {
   @Post('custom')
   @HttpCode(200)
   custom(@Body() body: CustomDto): void {}
+
+  @Get('lists')
+  async getUsers() {
+    const todoLists = await this.dbProvider.select().from(todoListSchema);
+    return todoLists;
+  }
 }

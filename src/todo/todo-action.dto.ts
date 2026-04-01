@@ -8,5 +8,5 @@ export class TodoActionDdto implements TodoAction {
   todoList?: string;
   @IsString()
   @MinLength(1)
-  prompt: string;
+  prompt!: string;
 }

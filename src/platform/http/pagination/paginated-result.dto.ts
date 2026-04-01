@@ -12,17 +12,17 @@ import { Pagination } from '../../pagination/pagination';
 
 export class PaginatedResponseDto<T = unknown> implements PaginatedResult<T> {
   @ApiProperty({ minimum: 1 })
-  page: number;
+  page!: number;
 
   @ApiProperty({ minimum: 1 })
-  perPage: number;
+  perPage!: number;
 
-  total: number;
+  total!: number;
 
-  totalPages: number;
+  totalPages!: number;
 
   @ApiProperty({ isArray: true })
-  data: T[];
+  data!: T[];
 }
 
 export class PaginationDto implements Pagination {

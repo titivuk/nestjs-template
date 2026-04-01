@@ -1,8 +1,12 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
+import { AlsModule } from '../als/als.module';
 import { HttpExceptionFilter } from './http.exception-filter';
+import { AlsMiddleware } from './middlewares/als.middleware';
+import { RequestContextMiddleware } from './middlewares/request-context.middleware';
 
 @Module({
+  imports: [AlsModule],
   providers: [
     {
       provide: APP_FILTER,
@@ -10,4 +14,8 @@ import { HttpExceptionFilter } from './http.exception-filter';
     },
   ],
 })
-export class HttpModule {}
+export class HttpModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AlsMiddleware, RequestContextMiddleware).forRoutes('*');
+  }
+}

@@ -4,7 +4,7 @@ export class ErrorApiResponse {
   @ApiProperty({
     description: 'SCREAMING_CASE error code that identifies the problem type',
   })
-  code: string;
+  code!: string;
   @ApiProperty({
     description:
       'Short, human-readable summary of the problem. Should not change from occurrence to occurrence',
@@ -19,10 +19,10 @@ export class ErrorApiResponse {
 
 export class ResponseError {
   @ApiProperty({ description: 'Field name' })
-  field: string;
+  field!: string;
   @ApiProperty({
     description:
       'Human-readable explanation specific to this occurrence of the problem',
   })
-  detail: string;
+  detail!: string;
 }

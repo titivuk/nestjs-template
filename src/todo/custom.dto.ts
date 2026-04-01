@@ -5,15 +5,15 @@ import { IsInt, IsString, ValidateNested } from 'class-validator';
 export class CustomInnerDto {
   @ApiProperty()
   @IsString()
-  b: string;
+  b!: string;
 }
 
 export class CustomDto {
   @IsInt()
-  a: number;
+  a!: number;
 
   @ApiProperty({ type: CustomInnerDto })
   @ValidateNested()
   @Type(() => CustomInnerDto)
-  inner: CustomInnerDto;
+  inner!: CustomInnerDto;
 }
