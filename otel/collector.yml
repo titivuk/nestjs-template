@@ -1,0 +1,46 @@
+# receivers
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+# processors
+processors:
+  batch:
+    timeout: 10s
+    send_batch_size: 1024
+
+  # https://github.com/open-telemetry/opentelemetry-collector/blob/main/processor/memorylimiterprocessor/README.md
+  memory_limiter:
+    limit_mib: 512
+    check_interval: 1s
+
+# exporters
+exporters:
+  # for prometheus, collector exposes endpoint to scrape holding data in memory
+  prometheus:
+    endpoint: 0.0.0.0:8889
+
+  debug:
+    verbosity: basic
+
+# service
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      # order of processors is important, invocation is sequential
+      processors: [memory_limiter, batch]
+      exporters: [debug]
+    metrics:
+      receivers: [otlp]
+      # order of processors is important, invocation is sequential
+      processors: [memory_limiter, batch]
+      exporters: [prometheus, debug]
+    # logs:
+    #   receivers: [otlp]
+    #   processors: [batch]
+    #   exporters: [debug]

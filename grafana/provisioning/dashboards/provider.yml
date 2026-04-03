@@ -1,0 +1,10 @@
+apiVersion: 1
+
+providers:
+  - name: default
+    # load dashboards from the filesystem
+    type: file
+    options:
+      # path to mounted volume inside docker container
+      path: /etc/grafana/provisioning/dashboards
+      foldersFromFilesStructure: true

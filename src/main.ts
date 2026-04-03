@@ -1,3 +1,5 @@
+import '@src/platform/monitoring/instrumentation';
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { configureApp } from './platform/http/configure-app';
