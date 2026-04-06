@@ -15,27 +15,28 @@ import {
   ATTR_SERVICE_NAME,
   ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
+import { ATTR_DEPLOYMENT_ENVIRONMENT_NAME } from '@opentelemetry/semantic-conventions/incubating';
+import { appConfig } from '../config/app.config';
+import { monitoringConfig } from './monitoring.config';
 
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
 
 const resource = defaultResource().merge(
   resourceFromAttributes({
-    // TODO: good place for application level config
-    [ATTR_SERVICE_NAME]: 'nestjs-template',
+    [ATTR_SERVICE_NAME]: appConfig.name,
+    [ATTR_DEPLOYMENT_ENVIRONMENT_NAME]: appConfig.env,
     [ATTR_SERVICE_VERSION]: '1.0.0',
   }),
 );
 
 const sdk = new NodeSDK({
   resource,
-  serviceName: 'nestjs-template',
-  // TOOD: urls should be dynamic
   traceExporter: new OTLPTraceExporter({
-    url: 'http://localhost:4317',
+    url: monitoringConfig.exporterUrl,
   }),
   metricReader: new PeriodicExportingMetricReader({
     exporter: new OTLPMetricExporter({
-      url: 'http://localhost:4317',
+      url: monitoringConfig.exporterUrl,
     }),
     exportIntervalMillis: 10_000,
   }),

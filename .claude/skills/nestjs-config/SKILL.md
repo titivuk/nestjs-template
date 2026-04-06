@@ -20,25 +20,34 @@ description: NestJS configuration patterns using ConfigModule with registerAs na
 
 ## Creating module config
 
-Each module config lives in a `<module-name>.config.ts` file next to the module.
+Each module config lives in a `<module-name>.config.ts` file next to the module. The type and config object are declared first so they can be used outside of DI (e.g. in instrumentation, bootstrap), then registered for DI.
 
 ```typescript
 // src/platform/db/db.config.ts
-import { ConfigType, registerAs } from '@nestjs/config';
+import { registerAs } from '@nestjs/config';
 
-export const dbConfigNamespace = registerAs('db', () => ({
+// 1. Declare the type
+export type DbConfig = {
+  dbUrl: string;
+};
+
+// 2. Create the config object (usable outside DI)
+export const dbConfig: DbConfig = {
   dbUrl: process.env.DB_URL!,
-}));
+};
 
-export type DbConfig = ConfigType<typeof dbConfigNamespace>;
+// 3. Register for DI
+export const dbConfigNamespace = registerAs('db', () => dbConfig);
 ```
 
 ### Conventions
 
+- Declare the type explicitly first (`export type DbConfig = { ... }`)
+- Create a plain config object (`export const dbConfig: DbConfig = { ... }`) — this is the source of truth, usable anywhere
+- Register for DI last (`export const dbConfigNamespace = registerAs(...)`) — the factory returns the already-created config object
 - Name the namespace export `<module>ConfigNamespace` (e.g. `dbConfigNamespace`)
-- Use `registerAs('<module-name>', () => (...))` — namespace matches module name
-- Export a type alias: `type DbConfig = ConfigType<typeof dbConfigNamespace>`
-- Read from `process.env` inside the factory — no `.env` files (they are ignored)
+- Use `registerAs('<module-name>', () => ...)` — namespace matches module name
+- Read from `process.env` in the config object — no `.env` files (they are ignored)
 - Use `!` assertion for required env vars
 
 ## Registering config in a module
