@@ -36,6 +36,7 @@ export class TodoController {
     pagination?: PaginationDto,
   ): PaginatedResponseDto<GetTodoItemsItem> {
     console.log(pagination instanceof PaginationDto);
+
     return {
       page: 1,
       perPage: 20,
@@ -55,7 +56,7 @@ export class TodoController {
   custom(@Body() body: CustomDto): void {}
 
   @Get('lists')
-  async getUsers() {
+  async getTodoLists() {
     const todoLists = await this.dbProvider.select().from(todoListSchema);
     return todoLists;
   }

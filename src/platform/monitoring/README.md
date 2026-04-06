@@ -6,3 +6,9 @@ npm install @opentelemetry/sdk-node \
   @opentelemetry/sdk-trace-node
 ```
 
+## Metrics
+
+```sh
+npm install --save @opentelemetry/sdk-metrics
+```
+
