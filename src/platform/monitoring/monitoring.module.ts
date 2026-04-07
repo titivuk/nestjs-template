@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MeterFactory } from './meter.factory';
+import { MeterFactory } from './metrics/meter.factory';
 
 @Module({
   providers: [MeterFactory],
