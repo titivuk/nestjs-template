@@ -1,6 +1,6 @@
 import { ValidationError } from '@nestjs/common';
-import { validationPipeExceptionFactory } from '../../../../src/platform/http/validation/validaiton-pipe.exception-factory';
-import { ValidationException } from '../../../../src/platform/http/validation/validation.exception';
+import { validationPipeExceptionFactory } from '@src/platform/http/validation/validaiton-pipe.exception-factory';
+import { ValidationException } from '@src/platform/http/validation/validation.exception';
 
 describe('validationPipeExceptionFactory', () => {
   it('should return multiple errors for a property', () => {

@@ -8,12 +8,12 @@ import {
   Post,
 } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { configureApp } from '@src/platform/http/configure-app';
+import { ErrorApiResponse } from '@src/platform/http/error-api-response.dto';
+import { ErrorCode } from '@src/platform/http/error-code';
+import { HttpModule } from '@src/platform/http/http.module';
 import { IsString } from 'class-validator';
 import request from 'supertest';
-import { configureApp } from '../../../src/platform/http/configure-app';
-import { ErrorApiResponse } from '../../../src/platform/http/error-api-response.dto';
-import { ErrorCode } from '../../../src/platform/http/error-code';
-import { HttpModule } from '../../../src/platform/http/http.module';
 
 class TestDto {
   @IsString()

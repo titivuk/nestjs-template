@@ -1,11 +1,11 @@
 import { Controller, Get, HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { configureApp } from '@src/platform/http/configure-app';
+import { HttpModule } from '@src/platform/http/http.module';
+import type { RequestContext } from '@src/platform/request-context/request-context';
+import { RequestContextModule } from '@src/platform/request-context/request-context.module';
+import { RequestContextService } from '@src/platform/request-context/request-context.service';
 import request from 'supertest';
-import { configureApp } from '../../../../src/platform/http/configure-app';
-import { HttpModule } from '../../../../src/platform/http/http.module';
-import type { RequestContext } from '../../../../src/platform/request-context/request-context';
-import { RequestContextModule } from '../../../../src/platform/request-context/request-context.module';
-import { RequestContextService } from '../../../../src/platform/request-context/request-context.service';
 
 @Controller()
 class TestController {

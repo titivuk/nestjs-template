@@ -1,10 +1,10 @@
 import { Controller, Get, HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { Als } from '@src/platform/als/als';
+import { AlsModule } from '@src/platform/als/als.module';
+import { configureApp } from '@src/platform/http/configure-app';
+import { HttpModule } from '@src/platform/http/http.module';
 import request from 'supertest';
-import { Als } from '../../../../src/platform/als/als';
-import { AlsModule } from '../../../../src/platform/als/als.module';
-import { configureApp } from '../../../../src/platform/http/configure-app';
-import { HttpModule } from '../../../../src/platform/http/http.module';
 
 @Controller()
 class TestController {

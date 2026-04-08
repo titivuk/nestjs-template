@@ -1,7 +1,5 @@
-import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-grpc';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
 import { containerDetector } from '@opentelemetry/resource-detector-container';
 import {
   defaultResource,
@@ -19,8 +17,6 @@ import { ATTR_DEPLOYMENT_ENVIRONMENT_NAME } from '@opentelemetry/semantic-conven
 import { appConfig } from '../config/app.config';
 import { monitoringConfig } from './monitoring.config';
 
-diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
-
 const resource = defaultResource().merge(
   resourceFromAttributes({
     [ATTR_SERVICE_NAME]: appConfig.name,
@@ -31,14 +27,16 @@ const resource = defaultResource().merge(
 
 const sdk = new NodeSDK({
   resource,
-  traceExporter: new OTLPTraceExporter({
-    url: monitoringConfig.exporterUrl,
-  }),
+  // OTEL_LOGS_EXPORER=none set to disable tracing
+  // traceExporter: new OTLPTraceExporter({
+  //   url: monitoringConfig.exporterUrl,
+  // }),
   metricReader: new PeriodicExportingMetricReader({
     exporter: new OTLPMetricExporter({
       url: monitoringConfig.exporterUrl,
     }),
     exportIntervalMillis: 10_000,
+    exportTimeoutMillis: 5_000,
   }),
   instrumentations: [getNodeAutoInstrumentations()],
   resourceDetectors: [envDetector, processDetector, containerDetector],
