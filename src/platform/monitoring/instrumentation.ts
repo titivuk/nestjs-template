@@ -17,34 +17,33 @@ import { ATTR_DEPLOYMENT_ENVIRONMENT_NAME } from '@opentelemetry/semantic-conven
 import { appConfig } from '../config/app.config';
 import { monitoringConfig } from './monitoring.config';
 
-const resource = defaultResource().merge(
-  resourceFromAttributes({
-    [ATTR_SERVICE_NAME]: appConfig.name,
-    [ATTR_DEPLOYMENT_ENVIRONMENT_NAME]: appConfig.env,
-    [ATTR_SERVICE_VERSION]: '1.0.0',
-  }),
-);
+export let sdk!: NodeSDK;
 
-const sdk = new NodeSDK({
-  resource,
-  // OTEL_LOGS_EXPORER=none set to disable tracing
-  // traceExporter: new OTLPTraceExporter({
-  //   url: monitoringConfig.exporterUrl,
-  // }),
-  metricReader: new PeriodicExportingMetricReader({
-    exporter: new OTLPMetricExporter({
-      url: monitoringConfig.exporterUrl,
+if (!sdk) {
+  const resource = defaultResource().merge(
+    resourceFromAttributes({
+      [ATTR_SERVICE_NAME]: appConfig.name,
+      [ATTR_DEPLOYMENT_ENVIRONMENT_NAME]: appConfig.env,
+      [ATTR_SERVICE_VERSION]: '1.0.0',
     }),
-    exportIntervalMillis: 10_000,
-    exportTimeoutMillis: 5_000,
-  }),
-  instrumentations: [getNodeAutoInstrumentations()],
-  resourceDetectors: [envDetector, processDetector, containerDetector],
-});
+  );
 
-sdk.start();
+  sdk = new NodeSDK({
+    resource,
+    // OTEL_LOGS_EXPORER=none set to disable tracing
+    // traceExporter: new OTLPTraceExporter({
+    //   url: monitoringConfig.exporterUrl,
+    // }),
+    metricReader: new PeriodicExportingMetricReader({
+      exporter: new OTLPMetricExporter({
+        url: monitoringConfig.exporterUrl,
+      }),
+      exportIntervalMillis: 10_000,
+      exportTimeoutMillis: 5_000,
+    }),
+    instrumentations: [getNodeAutoInstrumentations()],
+    resourceDetectors: [envDetector, processDetector, containerDetector],
+  });
 
-// TODO:
-// gracefull shutdown
-// sdk.shutdown().finally(() => exist)
-// most likely await sdk.shutdown();
+  sdk.start();
+}
