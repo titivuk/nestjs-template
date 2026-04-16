@@ -2,6 +2,7 @@ import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
+  HttpException,
   HttpStatus,
   Logger,
   NotFoundException,
@@ -18,7 +19,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
-    this.logger.error(exception);
+    if (this.shouldLog(exception)) {
+      this.logger.error({ msg: 'Unhandled exception', err: exception });
+    }
 
     // In certain situations `httpAdapter` might not be available in the
     // constructor method, thus we should resolve it here.
@@ -60,5 +63,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
       code: ErrorCode.NOT_FOUND,
       title: error.message,
     };
+  }
+
+  /**
+   * extend the rules when needed
+   */
+  private shouldLog(exception: unknown): boolean {
+    if (exception instanceof HttpException) {
+      return exception.getStatus() >= 500;
+    }
+
+    if (exception instanceof ValidationException) {
+      return false;
+    }
+
+    return true;
   }
 }

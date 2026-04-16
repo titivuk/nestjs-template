@@ -1,6 +1,7 @@
 import { Inject, Injectable, LoggerService, LogLevel } from '@nestjs/common';
 import pino from 'pino';
 import { PINO_LOGGER_KEY } from './pino';
+import { RequestContextService } from '../request-context/request-context.service';
 
 export type LogEntry = Record<string, unknown> & {
   msg?: string;
@@ -10,9 +11,10 @@ export type LogEntry = Record<string, unknown> & {
 
 @Injectable()
 export class AppLogger implements LoggerService {
-  @Inject(PINO_LOGGER_KEY) private readonly pinoLogger!: pino.Logger;
-
-  constructor() {}
+  constructor(
+    @Inject(PINO_LOGGER_KEY) private readonly pinoLogger: pino.Logger,
+    private readonly requestContext: RequestContextService,
+  ) {}
 
   log(msg: string, context?: string): void;
   log(err: Error, context?: string): void;
@@ -110,7 +112,17 @@ export class AppLogger implements LoggerService {
       return;
     }
 
+    this.enrichLog(entry);
     this.pinoLogger[level](entry);
+  }
+
+  private enrichLog(entry: LogEntry) {
+    const ctx = this.requestContext.getContext();
+
+    if (ctx) {
+      entry.reqId = ctx.requestId;
+      entry.traceId = ctx.traceId;
+    }
   }
 
   private isObject(val: unknown): val is object {
